@@ -25,17 +25,26 @@ class CommandParser {
      */
     fun parse(spokenText: String): Command {
         val text = spokenText.trim().lowercase()
-        
+        val swipeUp = Command.Swipe("E8", "E4") // 向上划/上滑
+        val swipeDown = Command.Swipe("E4", "E8")
+        val swipeLeft = Command.Swipe("F5", "D5")
+        val swipeRight = Command.Swipe("D5", "F5")
+
         return when {
             // Home command
             text.contains("home") -> Command.Home
-            
+            text.contains("主页") -> Command.Home
+
             // Back command
             text.contains("back") -> Command.Back
-            
+            text.contains("返回") -> Command.Back
+            text.contains("退出") -> Command.Back
+
             // Recents/Recent apps command
             text.contains("recent") -> Command.Recents
-            
+            text.contains("应用历史") -> Command.Recents
+            text.contains("历史应用") -> Command.Recents
+
             // Tap command: "tap A5" or "click B3"
             text.startsWith("tap ") || text.startsWith("click ") -> {
                 val position = extractPosition(text)
@@ -45,12 +54,36 @@ class CommandParser {
                     Command.Unknown
                 }
             }
-            
+
             // Swipe command: "swipe A1 to C5" or "swipe from A1 to C5"
             text.startsWith("swipe") -> {
                 parseSwipeCommand(text)
             }
-            
+
+
+            text.contains("上划") -> swipeUp
+            text.contains("上滑") -> swipeUp
+            text.contains("向上") -> swipeUp
+            text.contains("下滑") -> swipeDown
+            text.contains("下划") -> swipeDown
+            text.contains("向下") -> swipeDown
+            text.contains("左划") -> swipeLeft
+            text.contains("左滑") -> swipeLeft
+            text.contains("向左") -> swipeLeft
+            text.contains("右划") -> swipeRight
+            text.contains("右滑") -> swipeRight
+            text.contains("向右") -> swipeRight
+
+            text.contains("下一个") -> parsePageCommand("pagedown")
+            text.contains("下一页") -> parsePageCommand("pagedown")
+            text.contains("上一个") -> parsePageCommand("pageup")
+            text.contains("上一页") -> parsePageCommand("pageup")
+
+            // Page command: "pagedown/pageup" or "page down/up"
+            text.startsWith("page") -> {
+                parsePageCommand(text)
+            }
+
             // Circle command: "circle B3" or "draw circle at B3"
             text.contains("circle") -> {
                 val position = extractPosition(text)
@@ -60,7 +93,7 @@ class CommandParser {
                     Command.Unknown
                 }
             }
-            
+
             else -> Command.Unknown
         }
     }
@@ -89,6 +122,21 @@ class CommandParser {
         
         return if (startPos != null && endPos != null) {
             Command.Swipe(startPos, endPos)
+        } else {
+            Command.Unknown
+        }
+    }
+
+    /**
+     * Parses a pagedown/pageup command
+     */
+    private fun parsePageCommand(text: String): Command {
+        val parts = text.replace(" ", "")
+
+        return if (parts.contains("pagedown") || parts.contains("pagedone")) {
+            Command.Swipe("C8", "C4")
+        } else if (parts.contains("pageup")) {
+            Command.Swipe("C4", "C8")
         } else {
             Command.Unknown
         }

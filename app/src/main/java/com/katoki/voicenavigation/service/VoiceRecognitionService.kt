@@ -52,7 +52,15 @@ class VoiceRecognitionService : Service() {
      * Initializes the speech recognizer.
      */
     private fun initializeSpeechRecognizer() {
-        if (SpeechRecognizer.isRecognitionAvailable(this)) {
+        var available = SpeechRecognizer.isRecognitionAvailable(this)
+        val vrServiceName = android.provider.Settings.Secure.getString(this.getContentResolver(), "voice_recognition_service");
+        Log.d(TAG, "android.provider.Settings.Secure.getString report: $vrServiceName")
+        if (!available) {
+            Log.e(TAG, "SpeechRecognizer.isRecognitionAvailable report not available")
+            available = !android.text.TextUtils.isEmpty(vrServiceName)
+        }
+
+        if (available) {
             speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
             speechRecognizer?.setRecognitionListener(VoiceRecognitionListener())
             

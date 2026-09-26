@@ -141,7 +141,7 @@ class VoiceNavigationAccessibilityService : AccessibilityService() {
         path.lineTo(endPoint.x.toFloat(), endPoint.y.toFloat())
         
         val gestureBuilder = GestureDescription.Builder()
-        gestureBuilder.addStroke(GestureDescription.StrokeDescription(path, 0, 500))
+        gestureBuilder.addStroke(GestureDescription.StrokeDescription(path, 0, 200))
         
         dispatchGesture(gestureBuilder.build(), null, null)
         Log.d(TAG, "Executed swipe from $startPosition to $endPosition")
