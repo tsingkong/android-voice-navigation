@@ -243,3 +243,13 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 For issues, questions, or suggestions, please open an issue on the GitHub repository.
 
+## 关于此 fork
+- 我喜欢在厨房干活的时候听短视频，但是系统经常会推一些广告或者自己不感兴趣的内容。此时手动操作屏幕不方便，就想能用语音控制切换到下一个
+- 我的手机是 oneplus 13T，系统是 colorOS 15, 但是系统中的AI助手小布根本无法操作手机，官方的应用商店中也没有可用的App。后来，在 github 里找到了 Android Voice Navigation 
+- 但是原库只支持英文，而且，不支持直接上下左右滑动，要想实现下滑效果，需要说 swipe C4 to C8，指令比较长，而且经常识别错误
+- 我的改动是加入了 中文指令，并且支持上下切换视频
+- 这个应用依赖系统的 SpeechRecognizer 服务提供语音识别能力，但是 colorOS 15 根本没有提供 SpeechRecognizer 服务给第三方应用。所以在使用此应用之前，需要安装第三方应用来提供 SpeechRecognizer 服务。我的选择是基于 maise (https://github.com/Mobile-Artificial-Intelligence/maise) 加入了中文识别的能力 (https://github.com/tsingkong/maise-zh) 
+## TODO:
+- 加入更多的中文指令
+- 系统从竖屏切换到横屏后，坐标发生了变化，此应用暂未适配，所以某些指令无法正确执行
+- 加入可见即可说能力
